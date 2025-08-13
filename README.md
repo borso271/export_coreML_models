@@ -89,18 +89,51 @@ Always use the same sequence length for inference that was used during export (l
 
 ## Testing
 
-The included `test_cat_inference.py` script demonstrates:
+### Single Image Test
+
+The `test_cat_inference.py` script demonstrates basic functionality:
 - Loading both CoreML models
 - Processing an image (automatically resized to 224×224)
 - Comparing image embeddings against various text queries
 - Ranking similarity scores to identify image content
 
-Example output:
+### Comprehensive Model Comparison
+
+The `test_model_comparison.py` script provides extensive testing across multiple images and models:
+
+```bash
+python test_model_comparison.py
 ```
-🏆 Top matches:
-1. 'a photo of a cat' (similarity: 0.2913)
-2. 'a cat' (similarity: 0.2795)  
-3. 'a cute kitten' (similarity: 0.2647)
+
+#### Test Results
+
+We tested both **CLIP-ViT-Base-32** and **CLIP-ViT-Large-14** models on three different images:
+
+| Image | CLIP-ViT-Base-32 | CLIP-ViT-Large-14 | Result |
+|-------|------------------|-------------------|---------|
+| **🐱 Cat** | "a photo of a cat" (0.2913) | "a photo of a cat" (0.2757) | ✅ **Perfect** |
+| **🐶 Dog** | "a photo of a dog" (0.3031) | "a photo of a dog" (0.2575) | ✅ **Perfect** |
+| **🎒 Backpack** | "a photo of a backpack" (0.2998) | "a photo of a backpack" (0.2461) | ✅ **Perfect** |
+
+**Key Findings:**
+- **100% Accuracy**: Both models correctly identified all test images as their top match
+- **Consistent Performance**: Models preferred "a photo of X" phrasing over simple "X"
+- **Good Discrimination**: Related terms ranked appropriately (e.g., "kitten" ranked high for cat image)
+- **Base vs Large**: Base model showed slightly higher confidence scores, but both performed excellently
+
+Example detailed output:
+```
+🖼️  cat.jpeg (Expected: cat)
+CLIP-ViT-Base-32: 'a photo of a cat' (0.2913) ✅ CORRECT
+CLIP-ViT-Large-14: 'a photo of a cat' (0.2757) ✅ CORRECT
+
+🖼️  dog.jpeg (Expected: dog)  
+CLIP-ViT-Base-32: 'a photo of a dog' (0.3031) ✅ CORRECT
+CLIP-ViT-Large-14: 'a photo of a dog' (0.2575) ✅ CORRECT
+
+🖼️  backpack.jpg (Expected: backpack)
+CLIP-ViT-Base-32: 'a photo of a backpack' (0.2998) ✅ CORRECT
+CLIP-ViT-Large-14: 'a photo of a backpack' (0.2461) ✅ CORRECT
 ```
 
 ## Requirements
